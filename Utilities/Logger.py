@@ -1,5 +1,6 @@
 import numpy as np
-import time, datetime
+import time
+import datetime
 import matplotlib.pyplot as plt
 
 
@@ -17,20 +18,21 @@ class MetricLogger:
         self.ep_avg_losses_plot = save_dir / "loss_plot.jpg"
         self.ep_avg_qs_plot = save_dir / "q_plot.jpg"
 
-        # History metrics
         self.ep_rewards = []
         self.ep_lengths = []
         self.ep_avg_losses = []
         self.ep_avg_qs = []
 
-        # Moving averages, added for every call to record()
+
         self.moving_avg_ep_rewards = []
         self.moving_avg_ep_lengths = []
         self.moving_avg_ep_avg_losses = []
         self.moving_avg_ep_avg_qs = []
 
-        # Current episode metric
-        self.init_episode()
+        self.curr_ep_length = 0
+        self.curr_ep_loss = 0.0
+        self.curr_ep_q = 0.0
+        self.curr_ep_loss_length = 0
 
         # Timing
         self.record_time = time.time()
@@ -56,9 +58,9 @@ class MetricLogger:
         self.ep_avg_losses.append(ep_avg_loss)
         self.ep_avg_qs.append(ep_avg_q)
 
-        self.init_episode()
+        self.reset_episode()
 
-    def init_episode(self):
+    def reset_episode(self):
         self.curr_ep_reward = 0.0
         self.curr_ep_length = 0
         self.curr_ep_loss = 0.0
